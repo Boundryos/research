@@ -21,7 +21,7 @@ Being precise about scope is part of the claim. This page separates what the des
 | Admission, refusal, execution from sealed bytes | Demonstrated | Production deployment (later stage) |
 | Independent time-stamping of checkpoints (RFC 3161) | Built, not enabled | Enable on production checkpoints when decided |
 | Gating by recorded authority | Specified (designed, not built) | Implementation (not yet scheduled) |
-| Per-request overhead | Planned | Measure in realistic agent workloads |
+| Per-request overhead | Preliminary (two small runs, p50 33–59 ms) | Measure in realistic agent workloads |
 | Adversarial and independent evaluation | Planned | Prompt-injection benchmark; invite external red-teaming |
 | Cross-organisation operation | Planned | After single-organisation deployments mature |
 | Formal proofs of core properties | Planned | Mechanise key invariants |

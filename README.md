@@ -10,7 +10,7 @@ This repository collects the research notes, essays and evidence behind Boundry.
 
 ## The idea in one paragraph
 
-Most approaches to AI safety try to make the model behave. Boundry takes a different position: the harms we fear from AI agents are harms of **action** (records changed, money moved, systems operated), and the safety of an action does not have to live inside the model. In Boundry, an AI, a person or a program can only **propose** an action in a small declared language. A deterministic kernel, containing no model, **admits or refuses** each proposal against rules set by people. Anything not declared is refused, and the refusal is recorded with its reason. An admitted action is carried out from **exactly the same sealed bytes that were checked**, and every decision is sealed into a signed, hash-chained record that can be **verified offline by an independent verifier** sharing no code with the kernel.
+Most approaches to AI safety try to make the model behave. Boundry takes a different position: the harms we fear from AI agents are harms of **action** (records changed, money moved, systems operated), and the safety of an action does not have to live inside the model. In Boundry, an AI, a person or a program can only **propose** an action in a small declared language. A deterministic kernel, containing no model, **admits or refuses** each proposal against rules set by people. Anything not declared is refused, and the refusal is recorded with its reason. An admitted action is carried out from **exactly the same sealed bytes that were checked**, and every decision is sealed into a signed, hash-chained record that can be **verified offline by a separately implemented verifier** whose verification core imports no kernel code.
 
 ## A familiar shape
 
@@ -24,7 +24,7 @@ A read-only, offline verifier and an evaluation kit are public at **https://veri
 
 | | |
 |---|---|
-| [**Preprint (PDF)**](paper/Boundry_preprint_v1.0.1.pdf) | *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions* (v1.0.1, Oct 2026). LaTeX source in [`paper/`](paper/) |
+| [**Preprint (PDF)**](paper/Boundry_preprint_v1.0.2.pdf) | *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions* (v1.0.2, Oct 2026). LaTeX source in [`paper/`](paper/) |
 | [Claims and evidence](CLAIMS_AND_EVIDENCE.md) | Each claim, the evidence behind it, and its status |
 | [Design boundaries and next stages](LIMITATIONS.md) | What the design leaves to other layers, and where each capability is in the rollout |
 | [Related work](RELATED_WORK.md) | How Boundry relates to current research on agent guardrails, AI control and rules as code |
@@ -37,7 +37,7 @@ A read-only, offline verifier and an evaluation kit are public at **https://veri
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23129907.svg)](https://doi.org/10.5281/zenodo.23129907)
 
-Mueller, B. (2026). *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions*. Preprint v1.0.1. Zenodo. https://doi.org/10.5281/zenodo.23129907
+Mueller, B. (2026). *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions*. Preprint v1.0.2. Zenodo. https://doi.org/10.5281/zenodo.23129907
 
 This DOI always resolves to the latest version. See also [`CITATION.cff`](CITATION.cff).
 

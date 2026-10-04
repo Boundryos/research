@@ -5,8 +5,8 @@ authors:
   - family-names: Mueller
     given-names: Ben
     orcid: "https://orcid.org/0009-0004-0550-1485"
-version: "1.0.1"
-date-released: "2026-10-04"
+version: "1.0.2"
+date-released: "2026-10-05"
 url: "https://github.com/Boundryos/research"
 license: CC-BY-4.0
 doi: "10.5281/zenodo.23129907"

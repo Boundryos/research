@@ -23,13 +23,13 @@
 \small Boundry, Australia\\
 \small ORCID \href{https://orcid.org/0009-0004-0550-1485}{0009-0004-0550-1485} \quad
 \href{mailto:verify@boundry.tech}{verify@boundry.tech}}
-\date{\small Preprint, version 1.0.1 \quad October 2026}
+\date{\small Preprint, version 1.0.2 \quad October 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-\noindent As AI systems move from producing text to taking actions, the questions that matter change: what exactly was done, under which rule, what was refused and why, and whether someone independent can check the answers without trusting the operator. In the common \emph{prompt $\rightarrow$ model $\rightarrow$ action} arrangement, the model's output is the decision and the history is reconstructed afterwards from logs the operator controls. We describe Boundry, a system in which a model, a person or a program may only \emph{propose} an action in a small declared language. A deterministic kernel that contains no model admits or refuses each proposal against declared rules, executes an admitted proposal from the same sealed bytes that were checked, records refusals as first-class signed outcomes, and appends every step to a signed, hash-chained record. That record can be checked offline by an independent verifier that shares no code with the kernel. We present the design, a threat model, a worked example that readers can reproduce with a public verifier, and an evaluation on synthetic workloads: rebuild of state from the record, detection of single-byte alteration, agreement between independent verifier implementations, and byte-for-byte reproducibility across machines and platforms. The record layer is in live use in two financial applications, the full governing core is demonstrated end to end on a test bench, independent time-stamping is built, and authority-based gating is designed. The contribution is not a new cryptographic primitive but a composition of established ones into a single model-free, fail-closed and independently checkable record of what an AI system was permitted to do and did.
+\noindent As AI systems move from producing text to taking actions, the questions that matter change: what exactly was done, under which rule, what was refused and why, and whether someone independent can check the answers without trusting the operator. In the common \emph{prompt $\rightarrow$ model $\rightarrow$ action} arrangement, the model's output is the decision and the history is reconstructed afterwards from logs the operator controls. We describe Boundry, a system in which a model, a person or a program may only \emph{propose} an action in a small declared language. A deterministic kernel that contains no model admits or refuses each proposal against declared rules, executes an admitted proposal from the same sealed bytes that were checked, records refusals as first-class signed outcomes, and appends every step to a signed, hash-chained record. That record can be checked offline by a separately implemented verifier whose verification core imports no kernel code. We present the design, a threat model, a worked example that readers can reproduce with a public verifier, and an evaluation on synthetic workloads: rebuild of state from the record, detection of single-byte alteration, agreement between independent verifier implementations, and byte-for-byte reproducibility across machines and platforms. The record layer is in live use in two financial applications, the full governing core is demonstrated end to end on a test bench, independent time-stamping is built, and authority-based gating is designed. The contribution is not a new cryptographic primitive but a composition of established ones into a single model-free, fail-closed and independently checkable record of what the governed system admitted, instructed at its controlled edge, and recorded as its result. We compare Boundry with eight related systems capability by capability, including several concurrent 2026 designs.
 \end{abstract}
 
 \section{Introduction}
@@ -65,7 +65,7 @@ The pattern is old. Proof assistants in the LCF tradition~\citep{gordon1979lcf},
   \item The kernel's code and the integrity of the host on which it runs at the time of execution.
   \item Custody of the signing keys, and the distribution of the corresponding verifying keys to readers. In the public kit the verifying key ships with the kit itself, so a reader must trust that the key is the operator's.
   \item The people who declare the rules. Boundry applies the rules it is given; it does not judge whether they are good.
-  \item The edge connectors that carry out an admitted effect (writing a record, sending a message), to the extent that they faithfully apply the sealed bytes they are given.
+  \item The edge connectors that carry out an admitted effect (writing a record, sending a message), to the extent that they faithfully apply the sealed bytes they are given. The record therefore shows what the kernel admitted, what it instructed at its controlled edge, and what result it recorded. It does not by itself prove that an external effect occurred exactly as instructed, unless the external system returns an independently bound confirmation; no such receipts are claimed here.
 \end{itemize}
 
 \paragraph{Out of scope.} Actions that reach the world by a route that does not pass through the kernel; compromise of the host or keys; the truth of inputs (Boundry checks that a declared process was followed, not that its inputs were correct); availability and denial of service; and side channels.
@@ -103,7 +103,7 @@ The kernel is ordinary, deterministic software. It contains no model and cannot 
 \node[zone, fit=(kernel)(edges)(record), label={[font=\scriptsize]above:no model loaded or called}] {};
 \end{scope}
 \end{tikzpicture}
-\caption{The author may only propose. The kernel is the only component that can authorise an effect; edges act only on admitted, sealed bytes. The verifier shares no code with the kernel and needs only the record and a verifying key.}
+\caption{The author may only propose. The kernel is the only component that can authorise an effect; edges act only on admitted, sealed bytes. The verifier is implemented separately from the kernel, its verification core imports no kernel code, and it needs only the record and a verifying key.}
 \label{fig:arch}
 \end{figure}
 
@@ -154,7 +154,9 @@ Verdict & Means & Does not mean \\
 
 \subsection{Independent verification}
 
-The verifier, Boundry Verify~\citep{boundryverify}, is a separate, read-only package that runs on the reader's machine using only the Python standard library. It opens no socket, cannot sign, writes nothing, and attaches to no database; each of these properties is held by a named self-check with a planted control that the check must reject. It re-derives fingerprints, recomputes plan identities, walks each link from submitted intent to output, and compares runs by hash rather than by re-execution. Because it shares no code with the kernel, a defect in one is unlikely to be masked by the same defect in the other.
+The verifier, Boundry Verify~\citep{boundryverify}, is a separate, read-only package that runs on the reader's machine using only the Python standard library. It opens no socket, cannot sign, writes nothing, and attaches to no database; each of these properties is held by a named self-check with a planted control that the check must reject. It re-derives fingerprints, recomputes plan identities, walks each link from submitted intent to output, and compares runs by hash rather than by re-execution. Its verification core is implemented separately from the kernel and imports nothing from it; canonical forms, hashing and Ed25519 signature verification are its own implementations. A defect in one is therefore unlikely to be masked by the same defect in the other. One qualification: the public package also ships two kernel modules, the tenant-scope filter and the error type it raises, copied verbatim; the filter decides which records a tool may read, and neither takes part in the hash, linkage or signature checks. The verifier and the kernel come from the same programme, so this is implementation independence, not organisational independence.
+
+\paragraph{Which implementations are compared.} Three implementations appear in this paper. (i) The kernel's own bundle verifier. (ii) The Python verification core of Boundry Verify; the public package (version~0.3.1) is built from it, and an earlier internal revision of the same code is what the bench compared against (i). (iii) A separate verifier written in Go from the specification, used only internally. The 144-bundle result in Section~\ref{sec:eval} compares (i) with (ii); the 148-vector result compares (ii) with (iii), neither of which is the kernel. Only (ii), in its public form, is available to readers today, and only the kit results are reproducible by readers.
 
 \section{A worked example readers can reproduce}\label{sec:example}
 
@@ -186,11 +188,12 @@ Test suites (bench) & Kernel suite; corpus gate; full programme test set on the 
 Rebuild from record (bench) & 12 requests producing 144 sealed envelopes; state rebuilt from the record alone and compared & Identical; 144 form hashes re-derived; source unchanged \\
 Tamper detection (bench) & One byte altered in a copy of a sealed record & Refused; altered body and both hashes named \\
 Checkpoints (bench) & All checkpoints verified; heads recomputed from leaves; consecutive pairs checked for consistency; equivocation check & 144 of 144 verified and recomputed; of 143 consecutive pairs, 99 advanced and 44 repeated an unchanged checkpoint; none went backwards; no equivocation \\
-Verifier independence (bench) & Kernel's own verifier vs.\ offline verifier on the same 144 bundles & Agree on 144 of 144; witness receipt \textsc{unattested} on all, as no witness exists \\
-Second implementation (bench) & A separate Go verifier written from the specification, not ported, vs.\ the Python verifier & Agree on 148 of 148 vectors (internal; not published or third-party) \\
+Verifier independence (bench) & (i) Kernel's own verifier vs.\ (ii) Python verification core (earlier internal revision of the public package) on the same 144 bundles & Agree on 144 of 144; witness receipt \textsc{unattested} on all, as no witness exists \\
+Second implementation (bench) & (iii) Go verifier written from the specification, not ported, vs.\ (ii) & Agree on 148 of 148 vectors (internal; not published or third-party) \\
 Clean-room rebuild (bench) & Second machine; only two sealed source bundles and an offline cache of 57 packages; network blocked & Source trees, commit identities and an engine digest over 175 files equal to the primary machine's published figures \\
 Cross-platform determinism (kit) & Same governed requests on macOS arm64 and Linux aarch64, by different people & Byte-identical except wall-clock stamps, hashes over them, and descriptive run metadata \\
 Rebuild throughput (bench) & Rebuild from empty, one machine & 100{,}000 records in 9.27\,s \\
+Per-request latency (bench, preliminary) & One single-operation calculation request; two runs of 20 iterations in process on the same machine type (macOS arm64), using a pre-release build (compiler 1.0.0-rc1) rather than the evaluated kernel & p50 32.9 and 59.3\,ms; p95 37.2 and 68.1\,ms \\
 Verifier self-checks (kit) & Package's own checks, standard library only & 78 run, 0 failures, 0 skipped (Python 3.12, 3.13) \\
 Record layer (live use) & Every step sealed and recorded; in the reconciliation application, the application checks daily that its records match the chain and holds approvals on any mismatch & In live use in a bookkeeping application and, since October 2026, in a financial reconciliation application; each signs with its own key \\
 \bottomrule
@@ -199,7 +202,7 @@ Record layer (live use) & Every step sealed and recorded; in the reconciliation 
 
 On the checkpoint row: in 44 of the 143 consecutive pairs, the later checkpoint repeated the earlier one at the same tree size, so there was no extension for a consistency proof to cover; in the other 99 the tree advanced and the consistency proof held, and no pair went backwards. The run's separate equivocation check reported none, every checkpoint head was recomputed from the leaves (144 of 144), and both planted consistency controls fired as expected.
 
-Four qualifications apply. First, on the clean-room machine the full programme test set reported 11 failures (3{,}594 passed, 4 skipped); each was traced to an environmental difference (interpreter path, files outside the repositories, file timestamps, test harness) rather than to the software, and we report them rather than omit them. Second, the two reproducibility results are distinct: the clean-room rebuild shows that the \emph{software} rebuilds identically on another machine, while the kit shows that the same \emph{governed requests} execute identically on two platforms. Third, the rebuild figure is a throughput measurement on one machine, not a per-request latency; per-request latency will be measured in realistic agent workloads, where we expect it to be small relative to model inference time. Fourth, the kit results can be reproduced by readers today; the bench results, including the second verifier implementation, are reported from internal runs, and we would welcome independent replication.
+Four qualifications apply. First, on the clean-room machine the full programme test set reported 11 failures (3{,}594 passed, 4 skipped); each was traced to an environmental difference (interpreter path, files outside the repositories, file timestamps, test harness) rather than to the software, and we report them rather than omit them. Second, the two reproducibility results are distinct: the clean-room rebuild shows that the \emph{software} rebuilds identically on another machine, while the kit shows that the same \emph{governed requests} execute identically on two platforms. Third, the rebuild figure is a throughput measurement, and the latency figures are preliminary: a single small request type, two runs of twenty iterations on the same machine type, and a pre-release build (compiler 1.0.0-rc1) rather than the evaluated kernel. The two runs differ by nearly a factor of two, which itself shows how far from a benchmark these figures are. Per-request latency in realistic agent workloads remains to be measured; the preliminary figures suggest it is small relative to typical model inference times. Fourth, the kit results can be reproduced by readers today; the bench results, including the second verifier implementation, are reported from internal runs, and we would welcome independent replication.
 
 \paragraph{Development method.} The system was built with AI-assisted engineering tools, organised into roles and constrained by the substrate's own checks: canonical forms, invariants, reproducibility gates and the test suites above. Proposed changes that failed these checks were refused and recorded, and many of the system's primitives were introduced because an earlier proposal was refused for lacking them. We regard this as an experience report, not evidence that the method is better than conventional engineering; it is described further in~\citep{boundryresearch}.
 
@@ -217,7 +220,44 @@ Four qualifications apply. First, on the clean-room machine the full programme t
 
 \paragraph{Kernels and reference monitors.} The small trusted checker follows the LCF tradition~\citep{gordon1979lcf,demoura2021lean4}; the requirement that every access be mediated follows the reference-monitor concept~\citep{anderson1972planning} and the principle of fail-safe defaults~\citep{saltzer1975protection}.
 
-\paragraph{What is new.} The contribution is the composition: an author that may only propose and a model-free deterministic kernel that disposes; execution from the admitted bytes; identity independent of the signing key; refusal as a named, signed, first-class outcome; verification by an independent implementation, offline, with a verdict vocabulary that distinguishes instrument failure and absence of attestation from refutation; and a design organised around refusing and naming an absent precondition rather than defaulting through it.
+\paragraph{Concurrent work on pre-action authorisation and attestation.} Several 2026 preprints develop closely related ideas, independently of this work. The Open Agent Passport (OAP)~\citep{uchibeke2026oap} intercepts tool calls before execution, evaluates them against a declarative policy, fails closed, and produces a signed record of every decision, including denials; it reports a live adversarial testbed. Institutional attestation~\citep{salfeldnebgen2026ia} removes execution authority from the agent for designated actions and admits them only on independently signed, intent-bound evidence under a deterministic, deny-by-default policy. The Sovereign Assurance Boundary and Execution Broker~\citep{he2026sab,he2026seb} separate proposal, admission and execution for cloud mutations, with signed decision records, and evaluate a prototype on AWS and Kubernetes. \citet{qu2026i2e} frame agent security as intent-to-execution integrity, by analogy with compilers. Boundry shares the central move of these designs: the agent proposes, and something deterministic outside it decides.
+
+\paragraph{Comparison.} Table~\ref{tab:compare} compares capabilities as each work describes them. Cells were filled from the full text of each paper; ``--'' means the capability is not described, which is not the same as absent. Cell-level citations are in the research repository~\citep{boundryresearch}. Boundry's cells use its stage labels, and Boundry's column is N or P where others are stronger: it does not track information flow, has no adversarial benchmark evaluation, has measured per-request overhead only preliminarily, and has not been peer reviewed. The Swiss Cheese reference architecture~\citep{shamsujjoha2025swiss} is a taxonomy rather than a system and frames the comparison rather than appearing in it.
+
+\begin{table}[t]
+\centering\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Capabilities as described in each work. Y = yes; P = partial; N = no; -- = not described in the reviewed material (which is not the same as absent). Boundry: B = demonstrated on the bench; K = in the public kit; L = live use.}
+\label{tab:compare}
+\begin{tabular}{@{}l*{9}{c}@{}}
+\toprule
+ & CaMeL & Progent & AgentSpec & FIDES & Tracekit & OAP & IA & SAB/SEB & Boundry \\
+ & \citep{debenedetti2025camel} & \citep{shi2025progent} & \citep{wang2026agentspec} & \citep{costa2025fides} & \citep{ghosh2026tracekit} & \citep{uchibeke2026oap} & \citep{salfeldnebgen2026ia} & \citep{he2026sab,he2026seb} & \\
+\midrule
+\multicolumn{10}{@{}l}{\textit{Architecture}}\\
+Enforcement outside the model & Y & Y & Y & Y & Y & Y & Y & Y & Y (B) \\
+Fail-closed by default & P & Y & -- & N & N & Y & Y & Y & Y (B, K) \\
+Bounded declared plan language & P & N & N & N & N & N & P & P & Y (B) \\
+Executes the admitted representation & P & P & P & P & P & P & P & P & Y (B) \\
+\addlinespace
+\multicolumn{10}{@{}l}{\textit{Evidence}}\\
+Signed refusal records & N & -- & -- & -- & N & Y & P & P & Y (K) \\
+Tamper-evident decision log & -- & -- & -- & -- & Y & Y & P & P & Y (L) \\
+Separately implemented offline verifier & N & N & N & N & P & N & P & N & Y (K) \\
+Cross-platform determinism measured & -- & -- & -- & -- & -- & -- & -- & -- & Y (K) \\
+Adversarial evaluation & Y & Y & P & Y & P & Y & N & P & N \\
+Overhead measured & Y & -- & Y & Y & Y & Y & N & Y & P \\
+\addlinespace
+\multicolumn{10}{@{}l}{\textit{Scope and maturity}}\\
+Information-flow tracking & Y & N & P & Y & N & N & P & N & N \\
+Peer-reviewed & -- & N & Y & N & N & N & N & N & N \\
+Public implementation artefact & Y & Y & Y & Y & Y & Y & Y & N & P \\
+Live deployment reported & N & P & N & N & N & P & N & N & P (L) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{What is distinctive.} To our knowledge, at the time of writing, no other published system combines all of the following: (1) a bounded, declared plan language in which the whole proposal is sealed before admission and executed from the sealed bytes, rather than per-call checks of a separate request; (2) refusals as signed, first-class records; (3) a separately implemented verifier that runs offline and is publicly available with a reproducibility kit; (4) measured cross-platform determinism of governed execution; and (5) a record layer in live use. Individual elements appear elsewhere, several of them in the concurrent work above, and some of those works go further than Boundry on adversarial evaluation and information-flow control.
 
 \section{Design boundaries}\label{sec:limits}
 
@@ -245,7 +285,7 @@ Admission, refusal, execution from sealed bytes & Demonstrated & Production depl
 Independent time-stamping of checkpoints & Built, not enabled & Enable on production checkpoints when decided \\
 Gating by recorded authority & Specified & Implementation (not yet scheduled) \\
 \textsc{Indeterminate} verdict & Built (draft) & Finalise in a verifier release \\
-Per-request overhead & Planned & Measure in realistic agent workloads \\
+Per-request overhead & Preliminary & Measure in realistic agent workloads \\
 Adversarial and independent evaluation & Planned & Prompt-injection benchmark; invite external red-teaming \\
 Cross-organisation operation & Planned & After single-organisation deployments mature \\
 Formal proofs of core properties & Planned & Mechanise key invariants \\
@@ -259,12 +299,14 @@ We particularly welcome independent evaluation: the public verifier and kit are 
 
 The underlying problem is older than AI: an untrusted author whose output becomes action, whether a script, an integration or a junior employee. Nothing in the kernel requires the author to be a model. A system built this way could move the decision logic of a conventional backend (request validation, authorisation and tenant separation, business rules and the audit trail) into a small declared set that the kernel checks and records, while interfaces and integrations remain ordinary code. Measuring how far this reduces the size and opacity of real codebases is an open and, we think, interesting question.
 
+The properties reported here, a small trusted core, deterministic execution that reproduces across platforms, and records that verify offline without the producing system, also bear on settings beyond conventional servers, including offline and resource-constrained environments and supervisory control of physical systems. We are exploring these directions and expect to report on them separately.
+
 \section{Conclusion}
 
 Boundry relocates trust for AI-driven actions from the model to a small, deterministic, model-free kernel, and makes the kernel's decisions checkable by anyone with an offline verifier. The construction is assembled from established parts. What we offer is a working composition, an explicit statement of its trust assumptions and deployment stages, and public artefacts that allow readers to test its central claims for themselves. The most useful next steps are independent evaluation, adversarial testing, external anchoring of checkpoints, and measurement of overhead in realistic agent workloads. We welcome researchers who wish to examine, test or challenge the claims made here.
 
 \section*{Availability}
-A read-only offline verifier, its source and the evaluation kit are available at \url{https://github.com/Boundryos/boundry-verify} and \url{https://verify.boundry.tech}. The verifier is free to use and is not open source. Research notes, a claims-and-evidence table and essays are at \url{https://github.com/Boundryos/research} (DOI \href{https://doi.org/10.5281/zenodo.23129907}{10.5281/zenodo.23129907}). The kernel is proprietary. The methods described are the subject of Australian provisional patent applications; no patent licence is granted by this paper.
+A read-only offline verifier and the evaluation kit are available at \url{https://github.com/Boundryos/boundry-verify} and \url{https://verify.boundry.tech}. The verifier is source-available under the included proprietary licence: free to install and use unmodified, but not open-source licensed. Research notes, a claims-and-evidence table and essays are at \url{https://github.com/Boundryos/research} (DOI \href{https://doi.org/10.5281/zenodo.23129907}{10.5281/zenodo.23129907}). The kernel is proprietary. The methods described are the subject of Australian provisional patent applications; no patent licence is granted by this paper.
 
 \section*{Use of AI tools}
 AI-assisted tools were used in developing the software described and in drafting this paper. The author reviewed all content and is responsible for it.
