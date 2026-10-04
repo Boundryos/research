@@ -6,7 +6,7 @@ authors:
     given-names: Ben
     orcid: "https://orcid.org/0009-0004-0550-1485"
 version: "0.1"
-date-released: "2026-10-05"
+date-released: "2026-10-04"
 url: "https://github.com/Boundryos/research"
 license: CC-BY-4.0
-# doi: "10.5281/zenodo.XXXXXXX"   # add after the first Zenodo release
+doi: "10.5281/zenodo.23129908"

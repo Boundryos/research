@@ -33,7 +33,11 @@ A read-only, offline verifier and sample records are public at **https://verify.
 
 ## Citing this work
 
-See [`CITATION.cff`](CITATION.cff). A citable DOI will be added on the first release.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23129908.svg)](https://doi.org/10.5281/zenodo.23129908)
+
+Mueller, B. (2026). *Boundry: research notes on deterministic, verifiable governance of AI actions* (v0.1). Zenodo. https://doi.org/10.5281/zenodo.23129908
+
+See also [`CITATION.cff`](CITATION.cff).
 
 ## Intellectual property
 
