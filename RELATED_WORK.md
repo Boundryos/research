@@ -5,14 +5,14 @@ Boundry was developed independently, from practical need, and arrived at an arch
 ## Layered runtime guardrails
 
 **Shamsujjoha, Lu, Zhao, Zhu (CSIRO Data61).** *Swiss Cheese Model for AI Safety: A Taxonomy and Reference Architecture for Multi-Layered Guardrails of Foundation Model Based Agents.* arXiv:2408.02205.
-A taxonomy and reference architecture for layered runtime guardrails. In its terms, Boundry is a rule-based, fail-closed guardrail at the tool-execution and action stage, with a verifiable record of its own decisions.
+A taxonomy and reference architecture for layered runtime guardrails (ICSA 2025). In its terms, Boundry is a rule-based, fail-closed guardrail at the tool-execution and action stage, with a verifiable record of its own decisions.
 
 ## Enforcement outside the model
 
 - **Debenedetti et al.** *Defeating Prompt Injections by Design* (CaMeL). arXiv:2503.18813.
   A custom interpreter enforces data-flow policies on a model-written program. CaMeL tracks the origin of values, which Boundry does not. Boundry adds a sealed record checked by an independent verifier.
 - **Shi et al.** *Progent: Securing AI Agents with Privilege Control.* arXiv:2504.11703.
-  Deterministic, default-deny privilege rules for tool calls. This is the closest design. Boundry adds execution from the checked bytes and a verifiable record of every allow, refuse and approval.
+  Deterministic privilege policies for tool calls, among the closest designs. Boundry differs in executing from the checked bytes and in producing an independently verifiable record of each admission and refusal.
 - **Wang, Poskitt, Sun.** *AgentSpec: Customizable Runtime Enforcement for Safe and Reliable LLM Agents.* ICSE 2026; arXiv:2503.18666.
   Trigger, check and enforce rules with low overhead. AgentSpec rules fire on matching triggers; Boundry refuses anything not declared.
 - **Costa et al. (Microsoft).** *Securing AI Agents with Information-Flow Control* (FIDES). arXiv:2505.23643.
@@ -25,13 +25,13 @@ A taxonomy and reference architecture for layered runtime guardrails. In its ter
 
 ## Verifiable audit of agent actions
 
-**Ghosh.** *Tracekit: Tamper-Evident Intent–Reasoning–Action Auditing for Autonomous Coding Agents.* arXiv:2609.35659.
-A tamper-evident record of what an agent was asked, said and did. Tracekit witnesses actions; Boundry enforces them. The two are complementary.
+**Ghosh.** *Tracekit: Tamper-Evident Intent-Reasoning-Action Auditing for Autonomous Coding Agents.* arXiv:2609.35659.
+Gates a coding agent's tool calls with a pre-execution policy and records intent, reasoning and action in a tamper-evident, externally anchorable ledger. The closest work on the evidence side. Boundry differs in model-free admission limited to declared operations, execution from the sealed bytes that were admitted, and verification by an implementation independent of the producer.
 
 ## Multi-agent risk
 
-**Reid, O'Callaghan, Venini, Carroll, Caetano (Gradient Institute).** *Risks and controls for multi-agent systems.* Report for Australia's AI Safety Institute, Aug 2026; arXiv:2608.26626.
-Calls for actions that can be attributed to a responsible principal, for rollback, and for plans to pass through an approval process. Boundry implements plan-level approval with a verifiable record within one organisation. Operation across organisations has not been shown.
+**Reid, O'Callaghan, Venini, Carroll, Caetano.** *Risks and Controls for Multi-Agent Systems: An Analytical Framework for Deployment of AI Agents across Organisational Boundaries.* Published by the Australian AI Safety Institute, Aug 2026; arXiv:2608.26626.
+Analyses risks and controls for agents deployed across organisational boundaries. Boundry has been exercised only within one organisation.
 
 ## Rules as code
 

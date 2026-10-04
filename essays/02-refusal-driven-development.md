@@ -6,7 +6,7 @@
 
 Boundry was not designed from a body of prior research. I came to the literature afterwards, and found that much of it converges on the same ideas. Instead, the design emerged from a working method: AI agents proposed changes, and a deterministic substrate with fixed rules either admitted them or refused them with a stated reason.
 
-In practice, the development was organised as a set of AI agent roles: an architect, a governance role, a build role and an operations role. They were coordinated by me and constrained by written rules. Every proposed change had to pass the substrate's own checks: canonical forms, invariants, reproducibility gates and test suites, with thousands of tests and rehearsals run before a change was admitted. Changes that failed were refused, and the refusal was recorded.
+In practice, the development was organised as a set of AI agent roles: an architect, a governance role, a build role and an operations role. They were coordinated by me and constrained by written rules. Proposed changes had to pass the substrate's own checks: canonical forms, invariants, reproducibility gates and test suites, with thousands of tests and rehearsals run before a change was admitted. Changes that failed were refused, and the refusal was recorded.
 
 ## What the refusals did
 
