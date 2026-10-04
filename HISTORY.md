@@ -2,7 +2,7 @@
 
 Boundry was not designed from the research literature. It grew out of practical work, and its ideas changed considerably along the way. This page records how they developed, so that readers can see where the current design came from.
 
-The earlier documents named below were internal or limited-circulation working papers. They are superseded by the [preprint](paper/Boundry_preprint_v1.0.pdf), and some of their claims were stated more strongly than the current evidence supports. Researchers who would like to see them for historical interest can ask at verify@boundry.tech.
+The earlier documents named below were internal or limited-circulation working papers. They are superseded by the [preprint](paper/Boundry_preprint_v1.0.1.pdf), and some of their claims were stated more strongly than the current evidence supports. Researchers who would like to see them for historical interest can ask at verify@boundry.tech.
 
 ## Background
 
@@ -20,8 +20,8 @@ The problem predates AI. I have built software for regulated accounting work sin
 | Jun–Sep 2026 | **Refusal-driven build** | The kernel is built by AI agents working under the substrate's own checks; refused proposals drive the design. See [Essay 02](essays/02-refusal-driven-development.md). |
 | Sep 2026 | **Kernel V1 and clean-room reproduction** | The governing core is completed and rebuilt byte for byte on a second machine from sealed bundles. Explanations shift deliberately to "tamper-evident, not tamper-proof". |
 | Sep 2026 | **Independent verifier published** | [Boundry Verify](https://github.com/Boundryos/boundry-verify) and its evaluation kit go public at [verify.boundry.tech](https://verify.boundry.tech). |
-| Sep–Oct 2026 | **Record layer in production** | Sealing runs on real records in two Australian financial applications, with a daily check that application records and the chain agree. |
-| Oct 2026 | **Preprint v1.0** | The work is set out for researchers, with a threat model, evaluation and deployment stages. Related work is reviewed for the first time, and the design turns out to converge with several active research directions. |
+| Sep–Oct 2026 | **Record layer in production** | Sealing runs on real records in a bookkeeping application and, from October, in a financial reconciliation application, which checks daily that its records match the chain. |
+| Oct 2026 | **Preprint v1.0 (corrected v1.0.1)** | The work is set out for researchers, with a threat model, evaluation and deployment stages. Related work is reviewed for the first time, and the design turns out to converge with several active research directions. |
 
 ## What carried through, and what changed
 

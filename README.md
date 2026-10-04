@@ -4,7 +4,7 @@
 
 This repository collects the research notes, essays and evidence behind Boundry. It is written for researchers and practitioners working on AI safety, agent governance, verifiable computation and rules as code.
 
-> **Status:** being rolled out in stages. The record layer is in production; the full governing core is demonstrated end to end in testing. See [Claims and evidence](CLAIMS_AND_EVIDENCE.md) and [Design boundaries and next stages](LIMITATIONS.md).
+> **Status:** being rolled out in stages. The record layer is in live use; the full governing core is demonstrated end to end in testing. See [Claims and evidence](CLAIMS_AND_EVIDENCE.md) and [Design boundaries and next stages](LIMITATIONS.md).
 
 ---
 
@@ -24,7 +24,7 @@ A read-only, offline verifier and an evaluation kit are public at **https://veri
 
 | | |
 |---|---|
-| [**Preprint (PDF)**](paper/Boundry_preprint_v1.0.pdf) | *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions* (v1.0, Oct 2026). LaTeX source in [`paper/`](paper/) |
+| [**Preprint (PDF)**](paper/Boundry_preprint_v1.0.1.pdf) | *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions* (v1.0.1, Oct 2026). LaTeX source in [`paper/`](paper/) |
 | [Claims and evidence](CLAIMS_AND_EVIDENCE.md) | Each claim, the evidence behind it, and its status |
 | [Design boundaries and next stages](LIMITATIONS.md) | What the design leaves to other layers, and where each capability is in the rollout |
 | [Related work](RELATED_WORK.md) | How Boundry relates to current research on agent guardrails, AI control and rules as code |
@@ -35,11 +35,11 @@ A read-only, offline verifier and an evaluation kit are public at **https://veri
 
 ## Citing this work
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23129908.svg)](https://doi.org/10.5281/zenodo.23129908)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23129907.svg)](https://doi.org/10.5281/zenodo.23129907)
 
-Mueller, B. (2026). *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions*. Preprint v1.0. Zenodo. https://doi.org/10.5281/zenodo.23129908
+Mueller, B. (2026). *Boundry: Model-Free Admission and Independently Verifiable Records for AI-Proposed Actions*. Preprint v1.0.1. Zenodo. https://doi.org/10.5281/zenodo.23129907
 
-See also [`CITATION.cff`](CITATION.cff).
+This DOI always resolves to the latest version. See also [`CITATION.cff`](CITATION.cff).
 
 ## Intellectual property
 

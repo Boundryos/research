@@ -17,10 +17,10 @@ Being precise about scope is part of the claim. This page separates what the des
 
 | Capability | Stage | Next step |
 |---|---|---|
-| Signed, hash-chained record layer | In production | Report volume and reconciliation statistics |
-| Admission, refusal, execution from sealed bytes | Demonstrated | Production deployment in a first selected product |
-| Independent time-stamping of checkpoints (RFC 3161) | Built | Enable on production checkpoints, so the absence of rewriting is independently checkable rather than resting on the single operator key |
-| Gating by recorded authority | Specified | Implement and add to the public kit (today's kit shows the refusal side) |
+| Signed, hash-chained record layer | Live use (not yet institution-grade) | Independent time-stamping; rebuild-from-empty on live data |
+| Admission, refusal, execution from sealed bytes | Demonstrated | Production deployment (later stage) |
+| Independent time-stamping of checkpoints (RFC 3161) | Built, not enabled | Enable on production checkpoints when decided |
+| Gating by recorded authority | Specified (designed, not built) | Implementation (not yet scheduled) |
 | Per-request overhead | Planned | Measure in realistic agent workloads |
 | Adversarial and independent evaluation | Planned | Prompt-injection benchmark; invite external red-teaming |
 | Cross-organisation operation | Planned | After single-organisation deployments mature |
