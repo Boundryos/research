@@ -16,6 +16,17 @@ Most approaches to AI safety try to make the model behave. Boundry takes a diffe
 
 The architecture follows a pattern with a long history: **a small, trusted kernel that checks untrusted proposals.** Proof assistants such as Lean and Coq work this way, in the tradition of Robin Milner's LCF approach from the 1970s. Anyone, including an AI, may propose a proof; a small kernel accepts or rejects it. Boundry applies that pattern to **actions, records and rules** rather than proofs. See [A proof-assistant kernel for actions](essays/01-a-proof-assistant-kernel-for-actions.md).
 
+## Beyond AI
+
+The problem Boundry addresses is older than AI: an untrusted author whose output becomes action, whether a script, an integration or a junior employee. Nothing in the kernel requires the author to be a model. A system built this way could move the decision logic of a conventional backend (request validation, authorisation, business rules and the audit trail) into a small declared set that the kernel checks and records, while interfaces and integrations remain ordinary code.
+
+The same properties may matter well beyond servers:
+- a small trusted core;
+- deterministic execution that reproduces across platforms;
+- records that verify offline without the system that produced them.
+
+Settings where they could apply include offline and resource-constrained environments, and supervisory control of physical systems. See [Beyond AI: governed computation](essays/03-execution-governance-beyond-ai.md) and [Research directions](RESEARCH_DIRECTIONS.md). We would welcome collaborators.
+
 ## Try it yourself
 
 A read-only, offline verifier and an evaluation kit are public at **https://verify.boundry.tech** (source: [Boundryos/boundry-verify](https://github.com/Boundryos/boundry-verify)). The verifier re-derives every fingerprint and re-checks every seal and chain link on your own machine. It cannot execute, sign or write.
@@ -29,7 +40,8 @@ A read-only, offline verifier and an evaluation kit are public at **https://veri
 | [Design boundaries and next stages](LIMITATIONS.md) | What the design leaves to other layers, and where each capability is in the rollout |
 | [Related work](RELATED_WORK.md) | How Boundry relates to current research on agent guardrails, AI control and rules as code |
 | [Development history](HISTORY.md) | How the ideas developed, from an accounting tool to a general substrate |
-| [Essays](essays/) | Short pieces on the design ideas and the development method |
+| [Research directions](RESEARCH_DIRECTIONS.md) | Open questions beyond AI, and the experiments that would answer them |
+| [Essays](essays/) | Short pieces on the design ideas, the development method, and governed computation beyond AI |
 | [About](ABOUT.md) | Who is behind this, and how to get in touch |
 | [Technical brief (PDF)](docs/Boundry_Technical_Brief_Oct2026.pdf) | Two-page overview |
 
