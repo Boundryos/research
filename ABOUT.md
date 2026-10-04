@@ -9,5 +9,5 @@ Boundry grew out of that need. Its record layer now runs in production in Austra
 I'm interested in hearing from researchers working on agent guardrails, AI control, verifiable computation and rules as code, particularly anyone who would like to examine, test or challenge the claims here.
 
 - **Contact:** verify@boundry.tech
-- **ORCID:** `[to add]`
+- **ORCID:** [0009-0004-0550-1485](https://orcid.org/0009-0004-0550-1485)
 - **Public verifier:** https://verify.boundry.tech
