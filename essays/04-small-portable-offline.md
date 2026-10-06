@@ -10,7 +10,7 @@ Each direction below carries one of three labels:
 - **Plausible:** follows from the design, but not yet tried.
 - **Speculative:** promising, with significant open questions.
 
-## 1. Small enough to trust · Measured
+## 1. Small enough to trust · Approximate
 
 There is a long engineering tradition behind keeping the trusted part small. Saltzer and Schroeder called it *economy of mechanism*. seL4 showed that an operating-system kernel of about 10,000 lines can be formally verified.[^sel4]
 
