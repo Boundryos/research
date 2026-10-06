@@ -14,9 +14,9 @@ Each direction below carries one of three labels:
 
 There is a long engineering tradition behind keeping the trusted part small. Saltzer and Schroeder called it *economy of mechanism*. seL4 showed that an operating-system kernel of about 10,000 lines can be formally verified.[^sel4]
 
-Boundry's measured sizes:
+Boundry's approximate sizes:
 
-| Component | Size |
+| Component | Approximate size |
 |---|---|
 | Governing core | about 32,000 lines of code (about 1.7 MB) |
 | Offline verifier package | about 0.35 MB, Python standard library only |
@@ -85,7 +85,7 @@ Running the governing core on phones has not been tried.
 ## 7. Other directions
 
 - **Reproducible research.** Agent experiments in which every step and every refusal is recorded, so another lab can re-check them.
-- **Regulatory record-keeping.** The EU AI Act requires high-risk systems to keep automatic logs,[^aiact] and regulated pharmaceutical systems require audit trails that do not obscure earlier entries.[^part11] A record that a regulator can verify independently goes beyond both requirements.
+- **Regulatory record-keeping.** The EU AI Act requires high-risk systems to keep automatic logs,[^aiact] and regulated pharmaceutical systems require audit trails that do not obscure earlier entries.[^part11] A record that a regulator can verify independently could go beyond both requirements.
 - **Evidence that outlives the vendor.** Records stay verifiable after the system that made them, or the company behind it, is gone.
 - **Governed device updates.** An update is admitted only if it matches a declared, sealed specification.
 
